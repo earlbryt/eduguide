@@ -27,7 +27,7 @@ export default function Hero() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative z-10">
             {/* Floating Badge */}
-            <div className="absolute -top-12 -left-6 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-2 shadow-xl border border-indigo-50 flex items-center space-x-2">
+            <div className="absolute -top-12 left-4 md:-left-6 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-2 shadow-xl border border-indigo-50 flex items-center space-x-2">
               <Brain className="w-5 h-5 text-indigo-600" />
               <span className="text-sm font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">
                 AI-Powered Education
@@ -61,13 +61,13 @@ export default function Hero() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <button className="group relative px-8 py-4 bg-indigo-600 text-white rounded-2xl text-lg font-semibold hover:bg-indigo-700 transition shadow-lg hover:shadow-indigo-200 flex items-center justify-center overflow-hidden">
+              <button className="group relative w-full sm:w-auto px-6 sm:px-6 py-3 bg-indigo-600 text-white rounded-2xl text-base sm:text-lg font-semibold hover:bg-indigo-700 transition shadow-lg hover:shadow-indigo-200 flex items-center justify-center overflow-hidden">
                 <span className="absolute inset-0 w-3 bg-white/20 skew-x-[20deg] group-hover:animate-shine"></span>
                 <span className="relative flex items-center">
                   Get Started <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition" />
                 </span>
               </button>
-              <button className="px-8 py-4 bg-white text-indigo-600 rounded-2xl text-lg font-semibold hover:bg-indigo-50 transition border border-indigo-100 flex items-center justify-center group">
+              <button className="w-full sm:w-auto px-6 sm:px-6 py-3 bg-white text-indigo-600 rounded-2xl text-base sm:text-lg font-semibold hover:bg-indigo-50 transition border border-indigo-100 flex items-center justify-center group">
                 <Globe className="mr-2 h-5 w-5" />
                 Explore Universities
                 <Sparkles className="ml-2 h-5 w-5 opacity-0 group-hover:opacity-100 transition" />

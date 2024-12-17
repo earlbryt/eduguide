@@ -1,265 +1,225 @@
-import React, { useState, useEffect } from 'react';
-import { Building, Star, Users, BookOpen, Trophy, ArrowRight, MapPin, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Building2, GraduationCap, Users, Trophy, Globe2, Book, Code, Stethoscope, Briefcase, Palette, Star, Clock, MapPin, Home, Award } from 'lucide-react';
 
-const universities = [
+interface UniversityInfo {
+  name: string;
+  location: string;
+  description: string;
+  image: string;
+  domains: {
+    name: string;
+    icon: JSX.Element;
+    description: string;
+  }[];
+  quickFacts: {
+    icon: JSX.Element;
+    label: string;
+    value: string;
+  }[];
+}
+
+const universities: UniversityInfo[] = [
   {
     name: "University of Ghana",
-    logo: "/universities/uog-logo.png",
-    image: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80",
     location: "Accra, Ghana",
-    programs: 150,
-    rating: 4.8,
-    students: "38,000+",
-    established: 1948,
-    achievements: "Top 10 in Africa",
     description: "Ghana's premier university, known for excellence in research and innovation.",
-    specialties: ["Medicine", "Engineering", "Business", "Arts"],
-    colors: {
-      primary: "from-blue-600 to-indigo-600",
-      secondary: "from-blue-400 to-indigo-400"
-    }
+    image: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000",
+    domains: [
+      { name: "Medicine", icon: <Stethoscope className="w-5 h-5" />, description: "State-of-the-art medical facilities and research centers" },
+      { name: "Computer Science", icon: <Code className="w-5 h-5" />, description: "Modern computing labs and innovative programs" },
+      { name: "Business", icon: <Briefcase className="w-5 h-5" />, description: "Industry-focused business education" },
+      { name: "Arts & Sciences", icon: <Palette className="w-5 h-5" />, description: "Rich cultural and scientific programs" }
+    ],
+    quickFacts: [
+      { icon: <Users className="w-4 h-4" />, label: "Student Body", value: "38,000+" },
+      { icon: <Trophy className="w-4 h-4" />, label: "World Ranking", value: "#10 in Africa" },
+      { icon: <Home className="w-4 h-4" />, label: "Campus Life", value: "Vibrant" },
+      { icon: <Award className="w-4 h-4" />, label: "Job Placement", value: "85%" }
+    ]
   },
   {
     name: "Kwame Nkrumah University",
-    logo: "/universities/knust-logo.png",
-    image: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80",
     location: "Kumasi, Ghana",
-    programs: 120,
-    rating: 4.7,
-    students: "42,000+",
-    established: 1952,
-    achievements: "Best Technical University",
     description: "Leading institution in science and technology education in West Africa.",
-    specialties: ["Technology", "Engineering", "Science", "Mathematics"],
-    colors: {
-      primary: "from-purple-600 to-pink-600",
-      secondary: "from-purple-400 to-pink-400"
-    }
+    image: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000",
+    domains: [
+      { name: "Technology", icon: <Code className="w-5 h-5" />, description: "Cutting-edge tech labs and innovation centers" },
+      { name: "Engineering", icon: <Building2 className="w-5 h-5" />, description: "Comprehensive engineering programs" },
+      { name: "Science", icon: <Book className="w-5 h-5" />, description: "Advanced scientific research facilities" },
+      { name: "Mathematics", icon: <Star className="w-5 h-5" />, description: "Strong mathematical foundation" }
+    ],
+    quickFacts: [
+      { icon: <Users className="w-4 h-4" />, label: "Student Body", value: "42,000+" },
+      { icon: <Trophy className="w-4 h-4" />, label: "World Ranking", value: "#5 in Africa" },
+      { icon: <Home className="w-4 h-4" />, label: "Campus Life", value: "Dynamic" },
+      { icon: <Award className="w-4 h-4" />, label: "Job Placement", value: "90%" }
+    ]
   },
   {
     name: "Ashesi University",
-    logo: "/universities/ashesi-logo.png",
-    image: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80",
     location: "Berekuso, Ghana",
-    programs: 45,
-    rating: 4.9,
-    students: "1,200+",
-    established: 2002,
-    achievements: "Most Innovative",
     description: "Fostering ethical leadership and innovative thinking in Africa.",
-    specialties: ["Computer Science", "Business", "Engineering", "Liberal Arts"],
-    colors: {
-      primary: "from-emerald-600 to-teal-600",
-      secondary: "from-emerald-400 to-teal-400"
-    }
+    image: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000",
+    domains: [
+      { name: "Computer Science", icon: <Code className="w-5 h-5" />, description: "Innovative computing and software development" },
+      { name: "Business", icon: <Briefcase className="w-5 h-5" />, description: "Entrepreneurial business education" },
+      { name: "Engineering", icon: <Building2 className="w-5 h-5" />, description: "Practical engineering applications" },
+      { name: "Liberal Arts", icon: <Book className="w-5 h-5" />, description: "Well-rounded education approach" }
+    ],
+    quickFacts: [
+      { icon: <Users className="w-4 h-4" />, label: "Student Body", value: "1,200+" },
+      { icon: <Trophy className="w-4 h-4" />, label: "World Ranking", value: "#15 in Africa" },
+      { icon: <Home className="w-4 h-4" />, label: "Campus Life", value: "Engaging" },
+      { icon: <Award className="w-4 h-4" />, label: "Job Placement", value: "95%" }
+    ]
   }
 ];
 
 export default function Universities() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [selectedUniversity, setSelectedUniversity] = useState<number | null>(null);
-  const [scrollY, setScrollY] = useState(0);
+  const [selectedUniversity, setSelectedUniversity] = useState<string | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const container = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const item = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.3
+      }
+    }
+  };
 
   return (
-    <section className="py-32 relative overflow-hidden">
-      {/* Premium Animated Background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-indigo-50/30"></div>
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 opacity-[0.03] mix-blend-multiply bg-[radial-gradient(circle_at_50%_50%,rgba(67,56,202,0.1)_0%,transparent_50%)]"></div>
-          <div className="absolute inset-0 animate-[move_20s_linear_infinite] opacity-10"
-            style={{
-              backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z\' fill=\'%234338ca\' fill-opacity=\'0.49\' fill-rule=\'evenodd\'/%3E%3C/svg%3E")',
-              backgroundSize: '60px 60px'
-            }}
-          ></div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-8 max-w-7xl">
-        {/* Animated Header Section */}
-        <div className="text-center mb-24 relative">
-          <div className="inline-block relative">
-            {/* Decorative Elements */}
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full"></div>
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full animate-pulse"></div>
-            
-            <span className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 tracking-wider uppercase mb-3 block animate-fadeIn">
-              World-Class Education
-            </span>
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 animate-slideUp relative">
-              Partner Universities
-              <span className="absolute -top-2 -right-4">
-                <Sparkles className="w-6 h-6 text-yellow-400 animate-pulse" />
-              </span>
-            </h2>
-            <p className="text-xl text-gray-600 animate-fadeIn max-w-2xl mx-auto">
-              Learn from Ghana's most prestigious educational institutions
-            </p>
-          </div>
+    <section id="universities" className="py-16 bg-gradient-to-b from-white to-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
+            Partner Universities
+          </h2>
+          <p className="text-lg text-gray-600">
+            Explore our network of prestigious educational institutions
+          </p>
         </div>
 
-        {/* Universities Grid with Premium Cards */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {universities.map((university, index) => (
-            <div
-              key={index}
-              className={`group relative transform transition-all duration-500 ${
-                selectedUniversity === index ? 'md:col-span-3' : ''
-              }`}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              onClick={() => setSelectedUniversity(selectedUniversity === index ? null : index)}
-              style={{
-                transform: hoveredIndex === index ? 'translateY(-8px)' : 'none'
-              }}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {universities.map((university) => (
+            <motion.div
+              key={university.name}
+              variants={item}
+              className="relative group"
             >
-              <div className={`
-                relative overflow-hidden rounded-2xl transition-all duration-500
-                ${hoveredIndex === index ? 'shadow-2xl shadow-indigo-200' : 'shadow-lg'}
-                ${selectedUniversity === index ? 'md:grid md:grid-cols-2 gap-8' : ''}
-                group-hover:shadow-2xl group-hover:shadow-indigo-200
-              `}>
-                {/* Animated Border Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent animate-shimmer"></div>
-                <div className="absolute inset-0 p-[2px] rounded-2xl bg-gradient-to-r ${university.colors.primary} opacity-50 group-hover:opacity-100 transition-opacity"></div>
-
-                {/* Card Content with Glass Effect */}
-                <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-8 h-full">
-                  {/* University Image */}
-                  <div className="relative mb-6 rounded-xl overflow-hidden group-hover:shadow-lg transition-shadow">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-                    <img
-                      src={university.image}
-                      alt={university.name}
-                      className="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute bottom-4 left-4 right-4 z-20">
-                      <h3 className="text-2xl font-bold text-white mb-2">
-                        {university.name}
-                      </h3>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center">
-                          <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                          <span className="ml-1.5 text-sm font-medium text-white">{university.rating}</span>
-                        </div>
-                        <div className="flex items-center text-white/90">
-                          <MapPin className="w-4 h-4 mr-1" />
-                          <span className="text-sm">{university.location}</span>
-                        </div>
-                      </div>
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={university.image}
+                    alt={university.name}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                    <h3 className="text-xl font-semibold text-white">{university.name}</h3>
+                    <div className="flex items-center gap-1 text-white/90 text-sm">
+                      <MapPin className="w-4 h-4" />
+                      <span>{university.location}</span>
                     </div>
-                  </div>
-
-                  {/* Stats Grid with Animated Hover */}
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="relative overflow-hidden group/stat rounded-xl">
-                      <div className="absolute inset-0 bg-gradient-to-r ${university.colors.primary} opacity-0 group-hover/stat:opacity-10 transition-opacity"></div>
-                      <div className="relative bg-gray-50 rounded-xl p-4 group-hover/stat:bg-white transition-colors">
-                        <div className="flex items-center space-x-2">
-                          <BookOpen className="w-5 h-5 text-indigo-600" />
-                          <span className="text-sm font-medium text-gray-600">Programs</span>
-                        </div>
-                        <p className="text-2xl font-bold text-gray-900 mt-1">
-                          {university.programs}+
-                        </p>
-                      </div>
-                    </div>
-                    <div className="relative overflow-hidden group/stat rounded-xl">
-                      <div className="absolute inset-0 bg-gradient-to-r ${university.colors.primary} opacity-0 group-hover/stat:opacity-10 transition-opacity"></div>
-                      <div className="relative bg-gray-50 rounded-xl p-4 group-hover/stat:bg-white transition-colors">
-                        <div className="flex items-center space-x-2">
-                          <Users className="w-5 h-5 text-indigo-600" />
-                          <span className="text-sm font-medium text-gray-600">Students</span>
-                        </div>
-                        <p className="text-2xl font-bold text-gray-900 mt-1">
-                          {university.students}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Expanded Content with Animations */}
-                  <div className={`
-                    transition-all duration-500 overflow-hidden
-                    ${selectedUniversity === index ? 'opacity-100 max-h-[500px]' : 'opacity-0 max-h-0'}
-                  `}>
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">About</h4>
-                        <p className="text-gray-600">{university.description}</p>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Key Specialties</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {university.specialties.map((specialty, idx) => (
-                            <span
-                              key={idx}
-                              className={`
-                                px-3 py-1 rounded-full text-sm relative overflow-hidden group/tag
-                                hover:scale-105 transform transition-all duration-300
-                              `}
-                            >
-                              <div className="absolute inset-0 bg-gradient-to-r ${university.colors.primary} opacity-10"></div>
-                              <span className="relative text-transparent bg-clip-text bg-gradient-to-r ${university.colors.primary}">
-                                {specialty}
-                              </span>
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Trophy className="w-5 h-5 text-yellow-500" />
-                        <span className="text-gray-600">{university.achievements}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Premium Action Button */}
-                  <div className="mt-6">
-                    <button className={`
-                      group/btn relative w-full overflow-hidden rounded-xl
-                      px-6 py-3 bg-gradient-to-r ${university.colors.primary}
-                      text-white transition-all duration-300
-                      hover:shadow-lg hover:shadow-indigo-200/50
-                      focus:ring-4 focus:ring-indigo-200
-                    `}>
-                      <div className="absolute inset-0 bg-white/20 translate-y-12 group-hover/btn:translate-y-0 transition-transform duration-300"></div>
-                      <div className="relative flex items-center justify-center space-x-2">
-                        <span className="font-semibold">Explore Programs</span>
-                        <ArrowRight className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />
-                      </div>
-                    </button>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
+                
+                <div className="p-4">
+                  <p className="text-gray-600 text-sm mb-4">{university.description}</p>
+                  <button
+                    onClick={() => setSelectedUniversity(selectedUniversity === university.name ? null : university.name)}
+                    className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center gap-2"
+                  >
+                    <GraduationCap className="w-5 h-5" />
+                    {selectedUniversity === university.name ? 'Show Less' : 'Explore Programs'}
+                  </button>
+                </div>
 
-        {/* Premium Call to Action */}
-        <div className="mt-20 text-center relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 blur-3xl opacity-20 -z-10"></div>
-          <button className="
-            relative group inline-flex items-center px-8 py-4
-            bg-gradient-to-r from-indigo-600 to-purple-600
-            hover:from-indigo-500 hover:to-purple-500
-            text-white rounded-xl
-            transform hover:-translate-y-1
-            transition-all duration-300
-            focus:ring-4 focus:ring-indigo-200
-          ">
-            <div className="absolute inset-0 bg-white/20 translate-y-12 group-hover:translate-y-0 transition-transform duration-300 rounded-xl"></div>
-            <span className="relative text-lg font-semibold mr-2">View All Universities</span>
-            <ArrowRight className="relative w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
+                <AnimatePresence>
+                  {selectedUniversity === university.name && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="p-4 border-t border-gray-100">
+                        {/* Quick Facts */}
+                        <div className="grid grid-cols-2 gap-3 mb-6">
+                          {university.quickFacts.map((fact, index) => (
+                            <div key={index} className="bg-gray-50 rounded-lg p-3 flex items-center gap-2">
+                              <div className="p-2 bg-indigo-100 rounded-lg text-indigo-600">
+                                {fact.icon}
+                              </div>
+                              <div>
+                                <p className="text-xs text-gray-500">{fact.label}</p>
+                                <p className="font-semibold text-gray-900">{fact.value}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Academic Domains */}
+                        <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                          <Building2 className="w-4 h-4 text-indigo-600" />
+                          Academic Excellence
+                        </h4>
+                        <div className="grid gap-3">
+                          {university.domains.map((domain, index) => (
+                            <div
+                              key={index}
+                              className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-3"
+                            >
+                              <div className="flex items-center gap-2 mb-1">
+                                <div className="text-indigo-600">
+                                  {domain.icon}
+                                </div>
+                                <h5 className="font-medium text-gray-900">{domain.name}</h5>
+                              </div>
+                              <p className="text-sm text-gray-600 ml-7">
+                                {domain.description}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Additional Resources */}
+                        <div className="mt-4 flex gap-2">
+                          <button className="flex-1 px-3 py-2 text-sm bg-white border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center gap-2">
+                            <Book className="w-4 h-4" />
+                            Programs Guide
+                          </button>
+                          <button className="flex-1 px-3 py-2 text-sm bg-white border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center gap-2">
+                            <Users className="w-4 h-4" />
+                            Student Life
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

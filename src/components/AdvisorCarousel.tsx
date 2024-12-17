@@ -71,7 +71,7 @@ interface AdvisorCarouselProps {
 
 export default function AdvisorCarousel({ onChatOpen }: AdvisorCarouselProps) {
   return (
-    <section className="relative py-20 overflow-hidden">
+    <section id="advisors" className="relative py-20 overflow-hidden">
       {/* Subtle Neural Network Pattern */}
       <div className="absolute inset-0 -z-10">
         {/* Neural Pattern */}

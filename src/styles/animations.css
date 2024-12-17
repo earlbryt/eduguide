@@ -34,4 +34,104 @@
 .animate-gradient-x {
   animation: gradient-x 15s ease infinite;
   background-size: 200% 200%;
-} 
+}
+
+/* iOS-like Spring Animations */
+@keyframes ios-spring {
+  0% { transform: scale(0.93); }
+  70% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes ios-press {
+  0% { transform: scale(1); }
+  100% { transform: scale(0.93); }
+}
+
+.ios-spring-in {
+  animation: ios-spring 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.ios-press {
+  animation: ios-press 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Premium Blur Effects */
+.premium-blur {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* iOS-like Card Hover */
+.ios-card-hover {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ios-card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth Scroll Behavior */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* iOS-like Button Press Effect */
+.ios-button {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.3s ease;
+}
+
+.ios-button:active {
+  transform: scale(0.95);
+}
+
+/* Premium Gradient Animation */
+@keyframes premium-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.premium-gradient {
+  background-size: 200% 200%;
+  animation: premium-gradient 8s ease infinite;
+}
+
+/* iOS-like Switch Animation */
+@keyframes ios-switch {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(20px); }
+}
+
+/* Magnetic Effect */
+.magnetic-effect {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Performance Optimizations */
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reduce Motion if Preferred */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hardware Acceleration */
+.hardware-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

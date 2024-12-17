@@ -64,7 +64,7 @@ function App() {
         onClose={() => setIsChatOpen(false)}
         advisorId={selectedAdvisorId ?? undefined}
       />
-      <FloatingActionButton onClick={handleFloatingChatOpen} />
+      {!isChatOpen && <FloatingActionButton onClick={handleFloatingChatOpen} />}
     </div>
   );
 }

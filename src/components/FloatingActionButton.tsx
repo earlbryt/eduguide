@@ -9,7 +9,7 @@ export default function FloatingActionButton({ onClick }: FloatingActionButtonPr
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-8 right-8 z-50 group"
+      className="fixed bottom-8 right-8 z-40 group"
     >
       <div className="relative group/btn bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 p-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-500">
         {/* Gradient background with animation */}

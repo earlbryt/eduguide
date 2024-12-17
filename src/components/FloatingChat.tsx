@@ -68,14 +68,20 @@ export default function ChatInterface({ isOpen, onClose }: ChatInterfaceProps) {
     }
   };
 
+  const adjustTextareaHeight = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = e.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50">
-      {/* Enhanced Background Pattern with Educational Theme */}
+    <div className="fixed inset-0 bg-gradient-to-br from-indigo-50 via-white to-purple-50 z-50">
+      {/* Enhanced Background Pattern */}
       <div className="absolute inset-0 pointer-events-none">
         <div 
-          className="absolute inset-0 opacity-[0.15] dark:opacity-[0.2]"
+          className="absolute inset-0 opacity-[0.15]"
           style={{
             backgroundImage: `
               radial-gradient(circle at 100% 100%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
@@ -93,69 +99,94 @@ export default function ChatInterface({ isOpen, onClose }: ChatInterfaceProps) {
       </div>
 
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200/20 dark:border-white/10 z-10">
+      <div className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-b border-indigo-100 shadow-sm z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+              className="p-2 rounded-xl hover:bg-indigo-50 transition-colors"
             >
-              <ArrowLeft className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+              <ArrowLeft className="w-6 h-6 text-indigo-600" />
             </button>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">AI Academic Advisor</h2>
-                <span className="px-2 py-0.5 text-xs font-medium bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-full border border-indigo-500/20 flex items-center gap-1">
-                  <Brain className="w-3 h-3" />
-                  AI-Powered
+                <h2 className="text-lg font-semibold text-gray-900">AI Academic Advisor</h2>
+                <span className="px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-indigo-500/10 to-purple-500/10 text-indigo-600 rounded-full border border-indigo-500/20 flex items-center gap-1">
+                  <span className="flex items-center gap-1">
+                    <Brain className="w-3 h-3" />
+                    <span>Smart Guidance</span>
+                  </span>
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">Powered by</p>
-                <span className="text-sm font-medium bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">EduGuide AI</span>
+                <div className="flex items-center gap-1.5">
+                  <GraduationCap className="w-4 h-4 text-indigo-600" />
+                  <span className="text-sm font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">
+                    EduGuide AI
+                  </span>
+                  <span className="text-gray-400">•</span>
+                  <span className="text-sm text-gray-500 flex items-center gap-1">
+                    <span>24/7</span>
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-          <div className="animate-bounce">
-            <GraduationCap className="w-8 h-8 text-indigo-500 dark:text-indigo-400" />
+          <div className="animate-bounce-slow">
+            <div className="relative">
+              <GraduationCap className="w-8 h-8 text-indigo-600" />
+              <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Messages */}
-      <div className="h-full overflow-y-auto pt-28 pb-32">
+      {/* Messages Container */}
+      <div className="h-full pt-24 pb-20 overflow-y-auto">
         <div className="max-w-3xl mx-auto px-4">
-          <div className="space-y-8">
+          <div className="space-y-6">
             {messages.map((message, index) => (
               <div
                 key={index}
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div 
-                  className={`max-w-[80%] backdrop-blur-sm ${
-                    message.role === 'user' 
-                      ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm'
-                      : 'bg-gray-100/90 dark:bg-white/10 text-gray-900 dark:text-white rounded-2xl rounded-tl-sm'
-                  } px-6 py-4 shadow-sm hover:scale-[1.02] transition-transform`}
+                <div
+                  className={`
+                    relative max-w-[85%] px-4 py-3 rounded-2xl shadow-sm
+                    ${message.role === 'user' 
+                      ? 'bg-indigo-600 text-white' 
+                      : 'bg-white border border-indigo-100'
+                    }
+                  `}
                 >
-                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                  <p className="text-xs mt-2 opacity-60">
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">
+                    {message.content}
                   </p>
+                  <span 
+                    className={`
+                      block text-[11px] mt-1
+                      ${message.role === 'user' ? 'text-indigo-200' : 'text-gray-400'}
+                    `}
+                  >
+                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
                 </div>
               </div>
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-gray-100/90 dark:bg-white/10 backdrop-blur-sm rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
-                  <div className="flex gap-1">
-                    {[...Array(3)].map((_, i) => (
-                      <div
-                        key={i}
-                        className={`w-2 h-2 rounded-full bg-indigo-500 dark:bg-indigo-400 animate-pulse`}
-                        style={{ animationDelay: `${i * 200}ms` }}
-                      />
-                    ))}
+                <div className="relative max-w-[85%] px-4 py-3 rounded-2xl bg-white border border-indigo-100 shadow-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce [animation-delay:-.3s]"></div>
+                    <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce [animation-delay:-.5s]"></div>
                   </div>
                 </div>
               </div>
@@ -165,30 +196,36 @@ export default function ChatInterface({ isOpen, onClose }: ChatInterfaceProps) {
         </div>
       </div>
 
-      {/* Input */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-t border-gray-200/20 dark:border-white/10">
-        <div className="max-w-3xl mx-auto px-4 py-4">
-          <div className="flex items-end gap-4">
-            <div className="flex-grow bg-gray-100 dark:bg-white/5 rounded-2xl">
+      {/* Input Container */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-indigo-100 p-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="relative flex items-end gap-2">
+            <div className="flex-grow">
               <textarea
                 ref={inputRef}
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  adjustTextareaHeight(e);
+                }}
                 onKeyDown={handleKeyPress}
-                placeholder="Ask about universities, programs, or career guidance..."
-                className="w-full bg-transparent border-none outline-none resize-none px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                placeholder="Type your message..."
+                className="w-full resize-none rounded-xl border border-indigo-200 bg-indigo-50/50 px-4 py-3 text-[15px] leading-relaxed placeholder:text-gray-400 focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-100 appearance-none"
+                style={{ maxHeight: '120px' }}
                 rows={1}
-                style={{ minHeight: '44px', maxHeight: '120px' }}
               />
             </div>
             <button
               onClick={handleSend}
-              disabled={!input.trim() || isLoading}
-              className="p-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white rounded-xl shadow-lg transition-colors hover:scale-105 active:scale-95"
+              disabled={!input.trim()}
+              className="flex-none rounded-xl bg-indigo-600 p-3 text-white shadow-lg transition-all hover:bg-indigo-700 hover:shadow-indigo-200 disabled:opacity-50 disabled:hover:bg-indigo-600 disabled:hover:shadow-none"
             >
-              <Send className="w-5 h-5" />
+              <Send className="h-5 w-5" />
             </button>
           </div>
+          <p className="mt-2 text-center text-xs text-gray-400">
+            Press Enter to send, Shift + Enter for new line
+          </p>
         </div>
       </div>
     </div>
